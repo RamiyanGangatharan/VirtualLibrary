@@ -26,16 +26,15 @@ public class LibraryUser {
         this.role = "MEMBER";
     }
 
-    public LibraryUser(String firstName, String lastName, int bannerID, String role)
+    public LibraryUser(String firstName, String lastName, String role)
     {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.bannerID = bannerID;
+        this.bannerID = random.nextInt((maxValue - minValue + 1) + minValue); // generates a random num regardless of user;
         this.role = role;
     }
 
-    @Override
-    public String toString() {
+    @Override public String toString() {
         return String.format("| %-15s | %-10s | %-10s |", firstName + " " + lastName, bannerID, role);
     }
 }
