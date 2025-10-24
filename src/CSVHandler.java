@@ -8,6 +8,11 @@ public class CSVHandler {
     private static final String CSV_PATH = "src/users.csv";
 
     // ===================== READ =====================
+
+    /**
+     * This method is used to read a CSV File
+     * @return a list of users
+     */
     public static List<LibraryUser> readCSV() {
         List<LibraryUser> users = new ArrayList<>();
 
@@ -34,7 +39,7 @@ public class CSVHandler {
                 users.add(user);
             }
 
-            System.out.println("CSV loaded successfully!");
+            System.out.println("CSV: " + CSV_PATH + " loaded successfully!");
         } catch (FileNotFoundException e) {
             System.err.println("CSV not found. A new one will be created when you save.");
         } catch (IOException e) {
@@ -45,6 +50,11 @@ public class CSVHandler {
     }
 
     // ===================== WRITE ALL =====================
+
+    /**
+     * This method will be used to write to a CSV File
+     * @param users a user object created by the program
+     */
     public static void writeAll(List<LibraryUser> users) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(CSV_PATH))) {
             pw.println("firstName,lastName,role,bannerID");
@@ -62,6 +72,11 @@ public class CSVHandler {
     }
 
     // ===================== APPEND (add one row) =====================
+
+    /**
+     * This method is used to create a row of data pertaining to users
+     * @param user a user object in the program.
+     */
     public static void appendRow(LibraryUser user) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(CSV_PATH, true))) {
             pw.printf("%s,%s,%s,%d%n",
@@ -76,10 +91,19 @@ public class CSVHandler {
 
     // ===================== FUTURE: UPDATE / DELETE =====================
     // These are simplified: you just call writeAll() after editing the list.
+
+    /**
+     * This method is used to update a row of data pertaining to users
+     * @param users user objects in the program.
+     */
     public static void updateRow(List<LibraryUser> users) {
         writeAll(users);
     }
 
+    /**
+     * This method is used to delete a row of data pertaining to users
+     * @param users user objects in the program.
+     */
     public static void deleteRow(List<LibraryUser> users) {
         writeAll(users);
     }
