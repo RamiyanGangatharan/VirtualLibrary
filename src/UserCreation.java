@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UserCreation {
-    static ArrayList<LibraryUser> users = new ArrayList<>();
+    static ArrayList<LibraryUser> users = new ArrayList<>(CSVHandler.readCSV());
     static Scanner scanner = new Scanner(System.in);
 
     private static final List<String> VALID_ROLES = Arrays.asList("Admin", "Librarian", "Student", "Member");
@@ -23,6 +23,7 @@ public class UserCreation {
             System.out.println("|| 0. RETURN TO MAIN MENU");
             System.out.println("=====================================================================");
             System.out.print(">> ");
+
 
             if (!scanner.hasNextInt()) {
                 System.out.println("Invalid input. Try again.");
@@ -117,6 +118,7 @@ public class UserCreation {
         // Create the user now that all inputs are validated
         LibraryUser newUser = new LibraryUser(firstName, lastName, normalizedRole);
         users.add(newUser);
+        CSVHandler.appendRow(newUser);
 
         System.out.println("\nCreating user...");
         Utility.pause(100);
@@ -161,6 +163,7 @@ public class UserCreation {
         } else {
             System.out.println("Removing: " + userToRemove);
             users.remove(userToRemove);
+            CSVHandler.deleteRow(users);
             System.out.println("User successfully deleted!");
         }
 
@@ -241,6 +244,7 @@ public class UserCreation {
             System.out.println("Updating: " + userToUpdate + "to " + newUser);
             users.add(newUser);
             users.remove(userToUpdate);
+            CSVHandler.updateRow(users);
             System.out.println("User successfully updated!");
         }
     }
