@@ -4,18 +4,14 @@ public class startMenu {
 
     static Scanner scanner = new Scanner(System.in);
 
+    /**
+     * This is the method that runs the UI for the start menu
+     */
     public static void console() {
         int input = -1;
 
         while (input != 0) {
-            Utility.clearScreen();
-            System.out.println("===================================================");
-            System.out.println("         Welcome to our Virtual Library            ");
-            System.out.println("===================================================");
-            System.out.println(MenuOptions.MainMenuOptions.USER_CONFIGURATION.getText());
-            System.out.println(MenuOptions.MainMenuOptions.EXIT_APPLICATION.getText());
-            System.out.println("===================================================");
-            System.out.print(">> ");
+            UserInterface.StartUI();
 
             if (!scanner.hasNextInt()) {
                 System.out.println("Invalid input. Please enter a number.");

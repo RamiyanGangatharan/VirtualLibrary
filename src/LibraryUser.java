@@ -7,22 +7,6 @@ public class LibraryUser {
     private String role;
     private int bannerID;
 
-    public enum BannerIDValues {
-        ADMIN(900_000_000, 999_999_999),
-        LIBRARIAN(800_000_000, 899_999_999),
-        STUDENT(700_000_000, 799_999_999),
-        MEMBER(600_000_000, 699_999_999);
-
-        public final int min;
-        public final int max;
-
-        BannerIDValues(int min, int max) {
-            this.min = min;
-            this.max = max;
-        }
-    }
-
-
     private static final Random random = new Random();
 
     // Getters & Setters
@@ -35,28 +19,34 @@ public class LibraryUser {
     public int getBannerID() { return bannerID; }
     public void setBannerID(int bannerID) { this.bannerID = bannerID; }
 
+    /**
+     * This is a constructor to define the structure for a user.
+     * @param firstName firstname of the user
+     * @param lastName lastname of the user
+     * @param role role of the user
+     */
     public LibraryUser(String firstName, String lastName, String role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
 
         if (Objects.equals(role, "Admin")) {
-            BannerIDValues value = BannerIDValues.ADMIN;
+            BannerID.BannerIDValues value = BannerID.BannerIDValues.ADMIN;
             this.bannerID = random.nextInt((value.max - value.min) + 1) + value.min;
         }
 
         if (Objects.equals(role, "Librarian")) {
-            BannerIDValues value = BannerIDValues.LIBRARIAN;
+            BannerID.BannerIDValues value = BannerID.BannerIDValues.LIBRARIAN;
             this.bannerID = random.nextInt((value.max - value.min) + 1) + value.min;
         }
 
         if (Objects.equals(role, "Student")) {
-            BannerIDValues value = BannerIDValues.STUDENT;
+            BannerID.BannerIDValues value = BannerID.BannerIDValues.STUDENT;
             this.bannerID = random.nextInt((value.max - value.min) + 1) + value.min;
         }
 
         if (Objects.equals(role, "Member")) {
-            BannerIDValues value = BannerIDValues.MEMBER;
+            BannerID.BannerIDValues value = BannerID.BannerIDValues.MEMBER;
             this.bannerID = random.nextInt((value.max - value.min) + 1) + value.min;
         }
     }
@@ -64,5 +54,9 @@ public class LibraryUser {
     // Default constructor
     public LibraryUser() { this("John", "Doe", "Member"); }
 
+    /**
+     * Makes the output of the user table clean
+     * @return a formatted string for the display of users
+     */
     @Override public String toString() { return String.format("| %-15s | %-10s | %-10s |", firstName + " " + lastName, bannerID, role); }
 }

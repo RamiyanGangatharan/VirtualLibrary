@@ -1,11 +1,10 @@
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 public class UserCreation {
-    static ArrayList<LibraryUser> users = new ArrayList<>();
+    static ArrayList<LibraryUser> users = new ArrayList<>(CSVHandler.readCSV());
     static Scanner scanner = new Scanner(System.in);
 
     private static final List<String> VALID_ROLES = Arrays.asList("Admin", "Librarian", "Student", "Member");
@@ -13,16 +12,7 @@ public class UserCreation {
     public static void userConfig() {
         int choice = -1;
         while (choice != 0) {
-            Utility.clearScreen();
-            System.out.println("                       USER CONFIGURATION MENU                       ");
-            System.out.println("=====================================================================");
-            System.out.println("|| 1. VIEW ALL USERS");
-            System.out.println("|| 2. CREATE NEW USER");
-            System.out.println("|| 3. DELETE USER");
-            System.out.println("|| 4. UPDATE USER");
-            System.out.println("|| 0. RETURN TO MAIN MENU");
-            System.out.println("=====================================================================");
-            System.out.print(">> ");
+            UserInterface.UserConfigUI();
 
             if (!scanner.hasNextInt()) {
                 System.out.println("Invalid input. Try again.");
@@ -49,11 +39,7 @@ public class UserCreation {
     }
 
     public static void viewUsers() {
-        Utility.clearScreen();
-        System.out.println("                              CURRENT USERS                            ");
-        System.out.println("======================================================================");
-        System.out.printf("| %-20s | %-10s | %-10s |%n", "Name", "Banner ID", "Role");
-        System.out.println("----------------------------------------------------------------------");
+        UserInterface.UserListUI();
         if (users.isEmpty()) {
             System.out.println("| No users found. Create one to get started!");
         } else {
@@ -117,6 +103,7 @@ public class UserCreation {
         // Create the user now that all inputs are validated
         LibraryUser newUser = new LibraryUser(firstName, lastName, normalizedRole);
         users.add(newUser);
+        CSVHandler.appendRow(newUser);
 
         System.out.println("\nCreating user...");
         Utility.pause(100);
@@ -161,6 +148,7 @@ public class UserCreation {
         } else {
             System.out.println("Removing: " + userToRemove);
             users.remove(userToRemove);
+            CSVHandler.deleteRow(users);
             System.out.println("User successfully deleted!");
         }
 
@@ -241,6 +229,7 @@ public class UserCreation {
             System.out.println("Updating: " + userToUpdate + "to " + newUser);
             users.add(newUser);
             users.remove(userToUpdate);
+            CSVHandler.updateRow(users);
             System.out.println("User successfully updated!");
         }
     }
