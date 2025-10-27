@@ -4,7 +4,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UserCreation {
-    static ArrayList<LibraryUser> users = new ArrayList<>(CSVHandler.readCSV());
+    static ArrayList<LibraryUser> users = new ArrayList<>();
+
+    public static void init() {
+        List<LibraryUser> loaded = CSVHandler.readCSV();
+        users = new ArrayList<>(loaded != null ? loaded : new ArrayList<>());
+    }
+
     static Scanner scanner = new Scanner(System.in);
 
     private static final List<String> VALID_ROLES = Arrays.asList("Admin", "Librarian", "Student", "Member");
@@ -12,7 +18,7 @@ public class UserCreation {
     public static void userConfig() {
         int choice = -1;
         while (choice != 0) {
-            UserInterface.UserConfigUI();
+            UserInterface.printMenu("User Configuration Menu", UserInterface.UserConfigOps.values());
 
             if (!scanner.hasNextInt()) {
                 System.out.println("Invalid input. Try again.");
@@ -43,9 +49,14 @@ public class UserCreation {
         if (users.isEmpty()) {
             System.out.println("| No users found. Create one to get started!");
         } else {
+            long startTime = System.currentTimeMillis();
+            SortUsers.mergeSort(users, 0, users.size() - 1);
+            long endTime = System.currentTimeMillis();
+
             for (LibraryUser user : users) {
                 System.out.println(user);
             }
+            System.out.println("Total time taken: " + (endTime - startTime) + "ms");
         }
         System.out.println("======================================================================");
         Utility.pause(200);
@@ -54,9 +65,9 @@ public class UserCreation {
     public static void userCreatorMenu() {
         System.out.println("\n=== Create a New Library User ===");
 
-        String firstName = "";
-        String lastName = "";
-        String normalizedRole = "";
+        String firstName;
+        String lastName;
+        String normalizedRole;
 
         // Keep asking for input until valid entries are given
         while (true) {
@@ -122,12 +133,12 @@ public class UserCreation {
         }
 
         System.out.print("Enter the Banner ID of the user to delete: ");
-        String tempID = scanner.nextLine().trim();
+        String tempID_DELETE = scanner.nextLine().trim();
 
         // Validate numeric input
         int idToDelete;
         try {
-            idToDelete = Integer.parseInt(tempID);
+            idToDelete = Integer.parseInt(tempID_DELETE);
         } catch (NumberFormatException e) {
             System.out.println("Invalid ID format. Must be a number.");
             Utility.pause(200);
@@ -146,10 +157,18 @@ public class UserCreation {
         if (userToRemove == null) {
             System.out.println("No user found with that Banner ID.");
         } else {
-            System.out.println("Removing: " + userToRemove);
-            users.remove(userToRemove);
-            CSVHandler.deleteRow(users);
-            System.out.println("User successfully deleted!");
+            System.out.print("Are you sure you want to delete this user? (Y/N): ");
+            String confirm = scanner.nextLine().trim();
+            if (!confirm.equalsIgnoreCase("Y")) {
+                System.out.println("Deletion Cancelled.");
+                return;
+            }
+            else {
+                System.out.println("Removing: " + userToRemove);
+                users.remove(userToRemove);
+                CSVHandler.deleteRow(users);
+                System.out.println("User successfully deleted!");
+            }
         }
 
         Utility.pause(200);
@@ -166,11 +185,11 @@ public class UserCreation {
         }
 
         System.out.print("Enter the Banner ID of the user to update: ");
-        String tempID = scanner.nextLine().trim();
+        String TempID_UPDATE = scanner.nextLine().trim();
 
         int idToUpdate;
         try {
-            idToUpdate = Integer.parseInt(tempID);
+            idToUpdate = Integer.parseInt(TempID_UPDATE);
         } catch (NumberFormatException e) {
             System.out.println("Invalid ID format. Must be a number.");
             Utility.pause(200);
@@ -178,7 +197,6 @@ public class UserCreation {
         }
 
         LibraryUser userToUpdate = null;
-        LibraryUser newUser = new LibraryUser();
         for (LibraryUser user : users) {
             if (user.getBannerID() == idToUpdate) {
                 userToUpdate = user;
@@ -186,51 +204,48 @@ public class UserCreation {
             }
         }
 
-        int ID = userToUpdate.getBannerID();
-        String firstName = userToUpdate.getFirstName();
-        String lastName = userToUpdate.getLastName();
-        String role = userToUpdate.getRole();
+        if (userToUpdate == null) {
+            System.out.println("No user found with that Banner ID.");
+            Utility.pause(200);
+            return;
+        }
 
         System.out.println("What needs updating?: ");
         System.out.println("1. Firstname");
         System.out.println("2. Lastname");
         System.out.println("3. Role");
+        System.out.print("Choose an option: ");
+
+        if (!scanner.hasNextInt()) {
+            System.out.println("Invalid input. Returning to menu.");
+            scanner.nextLine();
+            return;
+        }
         int option = scanner.nextInt();
-        scanner.nextLine();
+        scanner.nextLine(); // consume newline
 
-        String input;
-        if (option == 1) {
-            System.out.print("Enter new firstname: ");
-            input = scanner.next();
-            newUser.setFirstName(input);
-            newUser.setLastName(lastName);
-            newUser.setRole(role);
-        }
-        if (option == 2) {
-            System.out.print("Enter new lastname: ");
-            input = scanner.next();
-            newUser.setLastName(input);
-            newUser.setFirstName(firstName);
-            newUser.setRole(role);
-        }
-        if (option == 3) {
-            System.out.print("Enter new role: ");
-            input = scanner.next();
-            newUser.setRole(input);
-            newUser.setFirstName(firstName);
-            newUser.setLastName(lastName);
+        switch (option) {
+            case 1 -> {
+                System.out.print("Enter new firstname: ");
+                userToUpdate.setFirstName(scanner.nextLine().trim());
+            }
+            case 2 -> {
+                System.out.print("Enter new lastname: ");
+                userToUpdate.setLastName(scanner.nextLine().trim());
+            }
+            case 3 -> {
+                System.out.print("Enter new role: ");
+                String newRole = scanner.nextLine().trim();
+                if (!VALID_ROLES.contains(Utility.capitalize(newRole))) {
+                    System.out.println("Invalid role. Must be one of: " + VALID_ROLES);
+                    return;
+                }
+                userToUpdate.setRole(Utility.capitalize(newRole));
+            }
+            default -> System.out.println("Invalid option.");
         }
 
-        newUser.setBannerID(idToUpdate);
-
-        if (userToUpdate == null) {
-            System.out.println("No user found with that Banner ID.");
-        } else {
-            System.out.println("Updating: " + userToUpdate + "to " + newUser);
-            users.add(newUser);
-            users.remove(userToUpdate);
-            CSVHandler.updateRow(users);
-            System.out.println("User successfully updated!");
-        }
+        CSVHandler.updateRow(users);
+        System.out.println("User successfully updated!");
     }
 }

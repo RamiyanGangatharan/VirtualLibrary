@@ -21,7 +21,7 @@ public class CSVHandler {
             boolean skipHeader = true;
 
             while ((line = br.readLine()) != null) {
-                if (skipHeader) { // skip the header
+                if (skipHeader) {
                     skipHeader = false;
                     continue;
                 }
@@ -40,12 +40,9 @@ public class CSVHandler {
             }
 
             System.out.println("CSV: " + CSV_PATH + " loaded successfully!");
-        } catch (FileNotFoundException e) {
-            System.err.println("CSV not found. A new one will be created when you save.");
-        } catch (IOException e) {
-            System.err.println("Error reading CSV: " + e.getMessage());
         }
-
+        catch (FileNotFoundException e) { System.err.println("CSV not found. A new one will be created when you save."); }
+        catch (IOException e) { System.err.println("Error reading CSV: " + e.getMessage()); }
         return users;
     }
 
@@ -58,17 +55,9 @@ public class CSVHandler {
     public static void writeAll(List<LibraryUser> users) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(CSV_PATH))) {
             pw.println("firstName,lastName,role,bannerID");
-            for (LibraryUser user : users) {
-                pw.printf("%s,%s,%s,%d%n",
-                        user.getFirstName(),
-                        user.getLastName(),
-                        user.getRole(),
-                        user.getBannerID());
-            }
+            for (LibraryUser user : users) { pw.printf("%s,%s,%s,%d%n", user.getFirstName(), user.getLastName(), user.getRole(), user.getBannerID()); }
             System.out.println("CSV updated successfully!");
-        } catch (IOException e) {
-            System.err.println("Error writing CSV: " + e.getMessage());
-        }
+        } catch (IOException e) { System.err.println("Error writing CSV: " + e.getMessage()); }
     }
 
     // ===================== APPEND (add one row) =====================
@@ -79,19 +68,12 @@ public class CSVHandler {
      */
     public static void appendRow(LibraryUser user) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(CSV_PATH, true))) {
-            pw.printf("%s,%s,%s,%d%n",
-                    user.getFirstName(),
-                    user.getLastName(),
-                    user.getRole(),
-                    user.getBannerID());
-        } catch (IOException e) {
-            System.err.println("Error appending row: " + e.getMessage());
+            pw.printf("%s,%s,%s,%d%n", user.getFirstName(), user.getLastName(), user.getRole(), user.getBannerID());
         }
+        catch (IOException e) { System.err.println("Error appending row: " + e.getMessage()); }
     }
 
     // ===================== FUTURE: UPDATE / DELETE =====================
-    // These are simplified: you just call writeAll() after editing the list.
-
     /**
      * This method is used to update a row of data pertaining to users
      * @param users user objects in the program.

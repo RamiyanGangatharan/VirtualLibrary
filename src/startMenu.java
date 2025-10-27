@@ -11,7 +11,7 @@ public class startMenu {
         int input = -1;
 
         while (input != 0) {
-            UserInterface.StartUI();
+            UserInterface.printMenu("Welcome to the Virtual Library", UserInterface.MainMenuOps.values());
 
             if (!scanner.hasNextInt()) {
                 System.out.println("Invalid input. Please enter a number.");
@@ -24,7 +24,10 @@ public class startMenu {
             scanner.nextLine(); // consume leftover newline
 
             switch (input) {
-                case 1 -> UserCreation.userConfig();
+                case 1 -> {
+                    UserCreation.init();
+                    UserCreation.userConfig();
+                }
                 case 0 -> System.out.println("Exiting program. Goodbye!");
                 default -> {
                     System.out.println("Invalid option. Please try again.");
