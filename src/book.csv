@@ -1,0 +1,5 @@
+title, author, ISBN, publisher, year, genre, bookLength, isAvailable
+The Hobbit               , J.R.R Tolkien       , 9780345445605  , HarperCollins  , 1937  , Fiction        , 300  , true      
+Dune                     , urmom               , 9798458404112  , urdaddontexist , 1998  , Fiction        , 700  , true      
+DOOM: Eternal            , Activision          , 9797506725339  , Activision     , 1976  , Horror         , 600  , true      
+The Graeme Jefferys      , Graeme Jefferys     , 9782842392314  , Rami inc.      , 2025  , Horror         , 1000 , true      

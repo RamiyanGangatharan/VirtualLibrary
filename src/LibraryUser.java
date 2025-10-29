@@ -1,3 +1,24 @@
+/**
+ * Represents a user of the library system.
+ * <p>
+ * The {@code LibraryUser} class stores key details about a library user,
+ * including their personal information (first name, last name), assigned role,
+ * and unique banner ID. This class serves as a foundation for managing user
+ * accounts, identifying roles (such as Admin, Librarian, or Member), and
+ * generating unique IDs for each user through the {@link Utility#generateBannerID(String)} method.
+ * </p>
+ *
+ * <p>
+ * The class provides getter and setter methods for encapsulated access,
+ * as well as a formatted {@code toString()} method for clean display in user tables.
+ * </p>
+ *
+ * <h2>Example Usage:</h2>
+ * <pre>
+ *     LibraryUser user = new LibraryUser("Alice", "Johnson", "Librarian");
+ *     System.out.println(user);
+ * </pre>
+ */
 public class LibraryUser {
     private String firstName;
     private String lastName;

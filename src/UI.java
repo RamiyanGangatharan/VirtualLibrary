@@ -1,7 +1,8 @@
-public class UserInterface {
+public class UI {
 
     public enum MainMenuOps {
         USER_CONFIGURATION(1, "USER CONFIGURATION"),
+        LIBRARY_CONFIGURATION(2, "LIBRARY CONFIGURATION"),
         EXIT_APPLICATION(0, "EXIT APPLICATION");
 
         private final int code;
@@ -33,6 +34,24 @@ public class UserInterface {
         @Override public String toString() { return "|| " + code + ". " + label; }
     }
 
+    public enum LibraryConfigOps {
+        VIEW_BOOKS(1, "VIEW ALL BOOKS"),
+        CREATE_BOOK(2, "CREATE A BOOK"),
+        DELETE_BOOK(3, "DELETE A BOOK"),
+        UPDATE_BOOK(4, "UPDATE A BOOK"),
+        RETURN(0, "RETURN TO MAIN MENU");
+
+        private final int code;
+        private final String label;
+
+        LibraryConfigOps(int code, String label) {
+            this.code = code;
+            this.label = label;
+        }
+
+        @Override public String toString() { return "|| " + code + ". " + label; }
+    }
+
 
     public static void printMenu(String title, Enum<?>[] options) {
         System.out.println();
@@ -51,4 +70,14 @@ public class UserInterface {
         System.out.printf("| %-20s | %-10s | %-10s |%n", "Name", "Banner ID", "Role");
         System.out.println("----------------------------------------------------------------------");
     }
+
+    public static void BookListUI() {
+        System.out.println();
+        System.out.println("                                                      CURRENT BOOKS                                                                       ");
+        System.out.println("===========================================================================================================================================");
+        System.out.printf("| %-25s | %-20s | %-17s | %-15s | %-6s | %-15s | %-5s | %-10s |%n",
+                "Title", "Author", "ISBN", "Publisher", "Year", "Genre", "Pages", "Availability");
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------");
+    }
+
 }
